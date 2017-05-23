@@ -59,17 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.share_to_moments).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                ArrayList<Uri> uris = new ArrayList<Uri>();
-                for(String path: adapter.getImagePaths()) {
-                    uris.add(getUri(path));
-                }
-                shareToTimeLine(uris);
-            }
-        });
+        
 
         findViewById(R.id.share_to_friend).setOnClickListener(new View.OnClickListener() {
 
