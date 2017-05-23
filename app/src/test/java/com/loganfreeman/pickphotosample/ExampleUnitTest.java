@@ -1,4 +1,4 @@
-package com.werb.pickphotosample;
+package com.loganfreeman.pickphotosample;
 
 import org.junit.Test;
 

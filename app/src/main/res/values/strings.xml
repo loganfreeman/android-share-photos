@@ -1,7 +1,9 @@
 <resources>
-    <string name="app_name">PickPhotoSample</string>
-    <string name="warning">警告</string>
-    <string name="warning_authority">未获得应用运行所需的基本权限，请在设置中开启权限后再使用</string>
-    <string name="exit">安全退出</string>
-    <string name="setting">设置</string>
+    <string name="app_name">Select photos</string>
+    <string name="warning">Warning</string>
+    <string name="warning_authority">Missing permission. Please enable SD card reading permission</string>
+    <string name="exit">Exit</string>
+    <string name="setting">Setting</string>
+    <string name="select_photo">Select photos</string>
+    <string name="share">Share</string>
 </resources>

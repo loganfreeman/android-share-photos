@@ -1,8 +1,7 @@
-package com.werb.pickphotosample;
+package com.loganfreeman.pickphotosample;
 
 import android.Manifest;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,13 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.werb.permissionschecker.PermissionChecker;
+import com.werb.pickphotosample.R;
 import com.werb.pickphotoview.PickPhotoView;
 import com.werb.pickphotoview.adapter.SpaceItemDecoration;
 import com.werb.pickphotoview.util.PickConfig;
 import com.werb.pickphotoview.util.PickUtils;
 
-import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,13 +37,11 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.click).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(permissionChecker.isLackPermissions(PERMISSIONS)){
-                    permissionChecker.requestPermissions();
-                }else {
-                    startPickPhoto();
-                }
+                onSelectPhotoClick();
             }
         });
+
+        onSelectPhotoClick();
 
         RecyclerView photoList = (RecyclerView) findViewById(R.id.photo_list);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 4);
@@ -53,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
         photoList.addItemDecoration(new SpaceItemDecoration(PickUtils.getInstance(MainActivity.this).dp2px(PickConfig.ITEM_SPACE), 4));
         adapter = new SampleAdapter(this,null);
         photoList.setAdapter(adapter);
+    }
+
+
+    private void onSelectPhotoClick() {
+        if(permissionChecker.isLackPermissions(PERMISSIONS)){
+            permissionChecker.requestPermissions();
+        }else {
+            startPickPhoto();
+        }
     }
 
     private void startPickPhoto(){
