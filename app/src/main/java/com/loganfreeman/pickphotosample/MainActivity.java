@@ -196,6 +196,11 @@ public class MainActivity extends AppCompatActivity {
      * @param path
      */
     private void shareToFriend(String path) {
+        if(!isInstallWeChart(this)){
+            Toast.makeText(this,"您没有安装微信",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Intent intent = new Intent();
         ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
         intent.setComponent(comp);
@@ -212,6 +217,10 @@ public class MainActivity extends AppCompatActivity {
      * @param uris
      */
     private void shareToTimeLine(ArrayList<Uri> uris) {
+        if(!isInstallWeChart(this)){
+            Toast.makeText(this,"您没有安装微信",Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent();
         ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareToTimeLineUI");
         intent.setComponent(comp);
