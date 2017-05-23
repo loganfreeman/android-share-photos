@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        
+
 
         findViewById(R.id.share_to_friend).setOnClickListener(new View.OnClickListener() {
 
