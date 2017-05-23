@@ -6,4 +6,6 @@
     <string name="setting">Setting</string>
     <string name="select_photo">Select photos</string>
     <string name="share">Share</string>
+    <string name="share_to_moments">分享图片到朋友圈</string>
+    <string name="share_to_friend">分享图片给好友</string>
 </resources>
