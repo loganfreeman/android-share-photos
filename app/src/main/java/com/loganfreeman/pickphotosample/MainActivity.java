@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +25,7 @@ import com.werb.pickphotoview.util.PickConfig;
 import com.werb.pickphotoview.util.PickUtils;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +45,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if(Build.VERSION.SDK_INT>=24){
+            try{
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
         permissionChecker = new PermissionChecker(this);
 
         findViewById(R.id.click).setOnClickListener(new View.OnClickListener() {
@@ -59,13 +71,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.share_to_timeline).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                shareToTimeLine(getImageUris());
+            }
+        });
+
 
 
         findViewById(R.id.share_to_friend).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                shareToFriend(adapter.getImagePaths().get(0));
+
+                shareToFriend(getImageUris());
             }
         });
 
@@ -77,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
         photoList.addItemDecoration(new SpaceItemDecoration(PickUtils.getInstance(MainActivity.this).dp2px(PickConfig.ITEM_SPACE), 4));
         adapter = new SampleAdapter(this,null);
         photoList.setAdapter(adapter);
+    }
+
+    private ArrayList<Uri> getImageUris() {
+        ArrayList<Uri> uris = new ArrayList<Uri>();
+        for(String path: adapter.getImagePaths()) {
+            uris.add(Uri.parse("file://" + path));
+        }
+        return uris;
     }
 
 
@@ -183,9 +212,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 分享图片给好友
      *
-     * @param path
+     * @param uris
      */
-    private void shareToFriend(String path) {
+    private void shareToFriend(ArrayList<Uri> uris) {
         if(!isInstallWeChart(this)){
             Toast.makeText(this,"您没有安装微信",Toast.LENGTH_SHORT).show();
             return;
@@ -194,9 +223,12 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent();
         ComponentName comp = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
         intent.setComponent(comp);
-        intent.setAction(Intent.ACTION_SEND);
+        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_STREAM, getUri(path));
+
+        //intent.putExtra("Kdescription", "分享多张图片到朋友圈");
+
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
         startActivity(intent);
     }
 
@@ -217,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
         intent.setAction(Intent.ACTION_SEND_MULTIPLE);
         intent.setType("image/*");
 
-        intent.putExtra("Kdescription", "分享多张图片到朋友圈");
+        //intent.putExtra("Kdescription", "分享多张图片到朋友圈");
 
         intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
         startActivity(intent);
